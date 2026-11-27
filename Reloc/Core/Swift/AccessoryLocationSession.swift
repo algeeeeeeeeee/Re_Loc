@@ -243,7 +243,7 @@ public final class AccessoryLocationSession {
                         }
                     }
                     guard let ptr else {
-                        continuation.resume(throwing: ConnectionCheckError.message("设备连接验证无返回结果"))
+                        continuation.resume(throwing: ConnectionCheckError.message("Device connection verification returned no result."))
                         return
                     }
                     defer { rl_string_free(ptr) }
@@ -254,7 +254,7 @@ public final class AccessoryLocationSession {
                         let carkit = obj["carkit_service"] as? String
                         continuation.resume(returning: ConnectionCheckResult(udid: udid, port: port, carkitService: carkit))
                     } else {
-                        let err = obj["error"] as? String ?? "设备连接验证失败"
+                        let err = obj["error"] as? String ?? "Device connection verification failed."
                         continuation.resume(throwing: ConnectionCheckError.message(err))
                     }
                 }
@@ -518,7 +518,7 @@ public final class AccessoryLocationSession {
             }
 
             guard let ptr else {
-                let err = "无法通过 Remote Pairing 建立设备服务通道"
+                let err = "Unable to establish the device service channel through Remote Pairing."
                 if configuration.mode != .send || isCancelled() {
                     if !isCancelled() {
                         snapshot.lastError = err
@@ -534,7 +534,7 @@ public final class AccessoryLocationSession {
                 snapshot.authenticated = false
                 snapshot.activeSentences = []
                 snapshot.packetsAcknowledged = cumulativePackets
-                snapshot.lastError = "通道建立失败，\(String(format: "%.1f", delay)) 秒后自动重连（第 \(reconnectAttempt) 次）"
+                snapshot.lastError = "Channel establishment failed, \(String(format: "%.1f", delay)) sec until automatic reconnection (attempt \(reconnectAttempt))"
                 onSnapshot(snapshot)
                 emitEvent("reconnecting", details: ["attempt": reconnectAttempt, "delay_s": delay, "reason": err], isError: true)
                 sleepCancellable(delay, deadline: overallDeadline)
@@ -548,7 +548,7 @@ public final class AccessoryLocationSession {
             guard obj["ok"] as? Bool == true,
                   let fdNum = obj["fd"] as? Int,
                   let handleNum = obj["handle"] as? UInt64 else {
-                let err = obj["error"] as? String ?? "打开 Remote Pairing 服务失败"
+                let err = obj["error"] as? String ?? "Failed to open the Remote Pairing service."
                 if configuration.mode != .send || isCancelled() || Self.isFatalPairingError(err) {
                     if !isCancelled() {
                         snapshot.lastError = err
@@ -565,7 +565,7 @@ public final class AccessoryLocationSession {
                 snapshot.authenticated = false
                 snapshot.activeSentences = []
                 snapshot.packetsAcknowledged = cumulativePackets
-                snapshot.lastError = "隧道中断，\(String(format: "%.1f", delay)) 秒后自动重连（第 \(reconnectAttempt) 次）"
+                snapshot.lastError = "Tunnel interrupted, \(String(format: "%.1f", delay)) sec until automatic reconnection (attempt \(reconnectAttempt))"
                 onSnapshot(snapshot)
                 emitEvent("reconnecting", details: ["attempt": reconnectAttempt, "delay_s": delay, "reason": err], isError: true)
                 sleepCancellable(delay, deadline: overallDeadline)
@@ -669,7 +669,7 @@ public final class AccessoryLocationSession {
                 snapshot.isRunning = true
                 snapshot.mode = configuration.mode
                 snapshot.packetsAcknowledged = cumulativePackets
-                snapshot.lastError = "连接断开，\(String(format: "%.1f", delay)) 秒后自动重连（第 \(reconnectAttempt) 次）"
+                snapshot.lastError = "Connection lost, \(String(format: "%.1f", delay)) sec until automatic reconnection (attempt \(reconnectAttempt))"
                 onSnapshot(snapshot)
                 emitEvent("reconnecting", details: ["attempt": reconnectAttempt, "delay_s": delay, "reason": err], isError: true)
                 sleepCancellable(delay, deadline: overallDeadline)
@@ -798,7 +798,7 @@ public final class AccessoryLocationSession {
                     snapshot.isRunning = true
                     snapshot.mode = configuration.mode
                     snapshot.packetsAcknowledged = cumulativePackets
-                    snapshot.lastError = "连接断开，\(String(format: "%.1f", delay)) 秒后自动重连（第 \(reconnectAttempt) 次）"
+                    snapshot.lastError = "Connection lost, \(String(format: "%.1f", delay)) sec until automatic reconnection (attempt \(reconnectAttempt))"
                     onSnapshot(snapshot)
                     emitEvent("reconnecting", details: ["attempt": reconnectAttempt, "delay_s": delay, "reason": err], isError: true)
                     sleepCancellable(delay, deadline: overallDeadline)
@@ -823,7 +823,7 @@ public final class AccessoryLocationSession {
                 snapshot.isRunning = true
                 snapshot.mode = configuration.mode
                 snapshot.packetsAcknowledged = cumulativePackets
-                snapshot.lastError = "Lockdown 中断，\(String(format: "%.1f", delay)) 秒后自动重连（第 \(reconnectAttempt) 次）"
+                snapshot.lastError = "Lockdown interrupted, \(String(format: "%.1f", delay)) sec until automatic reconnection (attempt \(reconnectAttempt))"
                 onSnapshot(snapshot)
                 emitEvent("reconnecting", details: ["attempt": reconnectAttempt, "delay_s": delay, "reason": message], isError: true)
                 sleepCancellable(delay, deadline: overallDeadline)
