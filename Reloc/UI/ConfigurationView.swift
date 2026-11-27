@@ -101,7 +101,7 @@ struct ConfigurationView: View {
                     .disabled(pairing.isRunning || viewModel.isVerifyingConnection || viewModel.snapshot.isRunning)
 
                     if viewModel.pairingStatus.isLoaded {
-                        Button("移除已保存Pairing Record", role: .destructive) {
+                        Button("Remove Saved Pairing Record", role: .destructive) {
                             viewModel.removePairingFile()
                         }
                         .disabled(pairing.isRunning || viewModel.isVerifyingConnection || viewModel.snapshot.isRunning)
@@ -131,7 +131,7 @@ struct ConfigurationView: View {
                                 .font(.subheadline.weight(.medium))
                                 .textSelection(.enabled)
                             if let port = viewModel.discoveredDevicePort {
-                                Text("Connected回环端口：\(port)")
+                                Text("Loopback port connected: \(port)")
                                     .font(.caption.monospacedDigit())
                                     .foregroundStyle(.secondary)
                             }
@@ -160,7 +160,7 @@ struct ConfigurationView: View {
                 } header: {
                     stepSectionHeader(number: "03", title: "Connection Verification")
                 } footer: {
-                    Text("自动发现 Remote Pairing 服务并用Pairing Record验证广播身份，最终通过Device Service确认连接可用。")
+                    Text("Automatically discover the Remote Pairing service, verify its advertised identity with the pairing record, and confirm availability through the device service.")
                 }
 
                 Section("Location Options") {
@@ -256,7 +256,7 @@ struct ConfigurationView: View {
                     Text("Apple Maps (native MapKit) is used by default. For global WGS-84 maps without Amap labels, switch to Global Streets, OpenStreetMap, or Global Satellite.")
                 }
             }
-            .navigationTitle("Device Pairing与连接")
+            .navigationTitle("Device Pairing & Connection")
             .navigationBarTitleDisplayMode(.inline)
             .task {
                 viewModel.importDiscoveredPairing()
@@ -302,7 +302,7 @@ struct ConfigurationView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(ready ? "Device Loopback Ready" : "Configure Local Loopback")
                         .font(.headline)
-                    Text(ready ? "Return to the Location tab to set a fixed location" : "依次完成Loopback Connection、本机配对与Connection Verification")
+                    Text(ready ? "Return to the Location tab to set a fixed location" : "Complete loopback setup, device pairing, and connection verification in order")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -312,7 +312,7 @@ struct ConfigurationView: View {
             HStack(spacing: 10) {
                 MetricTile(
                     title: "Pairing Status",
-                    value: viewModel.pairingStatus.isLoaded ? "已保存" : "Not Configured",
+                    value: viewModel.pairingStatus.isLoaded ? "Saved" : "Not Configured",
                     tint: viewModel.pairingStatus.isLoaded ? RelocTheme.emerald : .secondary
                 )
                 MetricTile(
