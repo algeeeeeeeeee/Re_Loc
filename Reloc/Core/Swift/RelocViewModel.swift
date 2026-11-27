@@ -398,7 +398,7 @@ public final class RelocViewModel: ObservableObject {
                 }
             }
 
-            geocoder.reverseGeocodeLocation(clLoc) { placemarks, _ in
+            geocoder.reverseGeocodeLocation(clLoc, preferredLocale: Locale(identifier: "en")) { placemarks, _ in
                 guard let pm = placemarks?.first else {
                     finish(nil)
                     return
