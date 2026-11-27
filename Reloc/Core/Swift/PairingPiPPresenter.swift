@@ -122,8 +122,8 @@ final class PairingPiPPresenter: NSObject, ObservableObject {
         }
         self.mode = .locationRefresh
         self.stepIndex = step
-        self.headline = headline
-        self.subtitle = subtitle
+        self.headline = RelocEnglish.translate(headline)
+        self.subtitle = RelocEnglish.translate(subtitle)
         self.pin = nil
         self.countdownSeconds = countdown
         self.outcome = .inProgress
@@ -134,8 +134,8 @@ final class PairingPiPPresenter: NSObject, ObservableObject {
         self.mode = .locationRefresh
         self.outcome = succeeded ? .succeeded : .failed
         self.stepIndex = succeeded ? 3 : self.stepIndex
-        self.headline = headline ?? (succeeded ? "Accessory location is fully active." : "Location refresh cancelled.")
-        self.subtitle = message
+        self.headline = RelocEnglish.translate(headline ?? (succeeded ? "Accessory location is fully active." : "Location refresh cancelled."))
+        self.subtitle = RelocEnglish.translate(message)
         self.pin = nil
         self.countdownSeconds = nil
         self.wantsAutoStart = false
@@ -153,8 +153,8 @@ final class PairingPiPPresenter: NSObject, ObservableObject {
 
     func update(step: Int, headline: String, subtitle: String, pin: String? = nil) {
         self.stepIndex = step
-        self.headline = headline
-        self.subtitle = subtitle
+        self.headline = RelocEnglish.translate(headline)
+        self.subtitle = RelocEnglish.translate(subtitle)
         self.pin = pin
         self.outcome = .inProgress
         enqueueCurrentFrame()
@@ -164,7 +164,7 @@ final class PairingPiPPresenter: NSObject, ObservableObject {
         self.outcome = succeeded ? .succeeded : .failed
         self.stepIndex = succeeded ? 3 : self.stepIndex
         self.headline = succeeded ? "Pairing successful · Record saved" : "Pairing incomplete"
-        self.subtitle = message
+        self.subtitle = RelocEnglish.translate(message)
         self.pin = nil
         self.wantsAutoStart = false
         enqueueCurrentFrame()
