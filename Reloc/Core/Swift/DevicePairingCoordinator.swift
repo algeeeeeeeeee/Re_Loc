@@ -190,8 +190,9 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
     }
 
     private func finish(error: String?, succeeded: Bool = false) {
-        self.error = error
-        status = error ?? (succeeded ? "Pairing record saved automatically." : "Pairing ended.")
+        let englishError = error.map(RelocEnglish.translate)
+        self.error = englishError
+        status = englishError ?? (succeeded ? "Pairing record saved automatically." : "Pairing ended.")
         isRunning = false
         stepIndex = succeeded ? 3 : 0
         pin = nil
@@ -206,7 +207,7 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
             background = .invalid
         }
         keepAlive.stop(deactivateAudioSession: false)
-        let finalMessage = error ?? (succeeded ? "Pairing complete. Return to Reloc to start location." : "Pairing ended.")
+        let finalMessage = englishError ?? (succeeded ? "Pairing complete. Return to Reloc to start location." : "Pairing ended.")
         pip.finish(succeeded: succeeded, message: finalMessage)
     }
 
