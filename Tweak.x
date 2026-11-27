@@ -117,7 +117,7 @@ static NSDictionary<NSString *, NSString *> *RELTranslations(void) {
             @"MFi 鉴权已通过，但系统尚未订阅外设 GPS。点击下方一键刷新（含悬浮 5 秒倒计时）即可唤醒订阅。": @"MFi authentication succeeded, but the system has not subscribed to accessory GPS yet. Tap Refresh below to wake the subscription (includes a floating 5-second countdown).",
             @"NMEA 已连通，但系统仍在沿用本机缓存定位。点击下方一键刷新（含悬浮 5 秒倒计时）即可 100% 强制切换。": @"NMEA is connected, but the system is still using the iPhone's cached location. Tap Refresh below to force the switch (includes a floating 5-second countdown).",
             @"一键刷新定位服务（浮窗指引）": @"Refresh Location Services (Floating Guide)",
-            @"重试": @"Retry",
+
             @"正在连接设备回环并完成 MFi 鉴权…": @"Connecting to the device loopback and completing MFi authentication…",
             @"鉴权成功，正在自动唤醒系统外设 GPS 订阅…": @"Authentication succeeded. Waking the system's accessory GPS subscription…",
             @"正在高速注入 NMEA 坐标，等待系统锁定外设源…": @"Injecting NMEA coordinates at high speed and waiting for the system to lock onto the accessory…",
