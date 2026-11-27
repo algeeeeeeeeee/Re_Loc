@@ -55,7 +55,7 @@ struct ContentView: View {
                 viewModel.alertMessage = nil
             }
         } message: {
-            Text(viewModel.alertMessage ?? "")
+            Text(RelocEnglish.translate(viewModel.alertMessage ?? ""))
         }
     }
 }
