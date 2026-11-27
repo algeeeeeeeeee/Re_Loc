@@ -33,7 +33,7 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
 
     @Published private(set) var isRunning = false
     @Published private(set) var stepIndex = 0 // 0=idle, 1=broadcasting, 2=connected/pin, 3=completed
-    @Published private(set) var status = "尚未开始设备配对"
+    @Published private(set) var status = "Device pairing has not started."
     @Published private(set) var pin: String?
     @Published private(set) var error: String?
 
@@ -49,12 +49,12 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
     func start(existingRequest: [String: String] = [:], onSaveRecord: @escaping (Data, Data, String) throws -> Void) {
         guard !isRunning else { return }
         #if targetEnvironment(simulator)
-        error = "设备端配对需要 iOS 27 或更新版本的真实 iPhone。"
+        error = "On-device pairing requires a physical iPhone running iOS 27 or later."
         status = error ?? ""
         return
         #else
         guard #available(iOS 27.0, *) else {
-            error = "当前系统请导入已有的配对文件；设备端直接配对需要 iOS 27。"
+            error = "Import an existing pairing file on this iOS version. On-device pairing requires iOS 27."
             status = error ?? ""
             return
         }
@@ -67,7 +67,7 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
         pin = nil
         error = nil
         cancelReason = nil
-        status = "正在准备本机配对服务…"
+        status = "Preparing the on-device pairing service…"
 
         let deadline = Date().addingTimeInterval(300)
         keepAlive.start(useSilentAudio: true)
@@ -77,14 +77,14 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
             let json = String(decoding: try JSONSerialization.data(withJSONObject: existingRequest), as: UTF8.self)
             background = UIApplication.shared.beginBackgroundTask(withName: "Reloc Device Pairing") { [weak self] in
                 Task { @MainActor in
-                    self?.cancel(reason: "系统结束了后台配对时间，请返回 Reloc 重试。")
+                    self?.cancel(reason: "The system ended the background pairing session. Return to Reloc and try again.")
                 }
             }
             let context = Unmanaged.passRetained(DevicePairingContext(owner: self, session: id)).toOpaque()
             handle = json.withCString { rl_device_pairing_start($0, devicePairingEventCallback, context) }
             if handle == 0 {
                 Unmanaged<DevicePairingContext>.fromOpaque(context).release()
-                finish(error: "无法启动设备配对服务。")
+                finish(error: "Unable to start the device pairing service.")
             }
         } catch {
             finish(error: error.localizedDescription)
@@ -115,7 +115,7 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
                   let port = event["port"] as? Int,
                   (1...65535).contains(port),
                   let txt = event["txt"] as? [String: String] else {
-                cancel(reason: "配对服务返回了无效的广播参数。")
+                cancel(reason: "The pairing service returned invalid broadcast parameters.")
                 return
             }
             let netService = NetService(
@@ -129,32 +129,32 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
             self.service = netService
             netService.publish()
             stepIndex = 1
-            status = "请前往「设置 → 隐私与安全性 → 开发者模式」，在底部选择「与 Reloc 配对」。"
+            status = "Go to Settings → Privacy & Security → Developer Mode, then select “Pair with Reloc” at the bottom."
             pip.update(
                 step: 1,
-                headline: "① 设置 → 隐私与安全性 → 开发者模式",
-                subtitle: "滑到底部点击「与 Reloc 配对」，配对码将显示在此处"
+                headline: "① Settings → Privacy & Security → Developer Mode",
+                subtitle: "Scroll to the bottom and tap “Pair with Reloc”. The pairing code will appear here."
             )
 
         case "connected":
             stepIndex = 2
-            status = "系统已连接，正在生成配对码…"
+            status = "System connected. Generating the pairing code…"
             pip.update(
                 step: 2,
-                headline: "② 系统已连接",
-                subtitle: "正在协商安全通道并生成 6 位配对码…"
+                headline: "② System Connected",
+                subtitle: "Negotiating a secure channel and generating the 6-digit pairing code…"
             )
 
         case "pin":
             guard let pin = event["pin"] as? String else { return }
             self.pin = pin
             stepIndex = 2
-            status = "请在系统设置中输入以下 6 位配对码。"
+            status = "Enter the following 6-digit pairing code in System Settings."
             UINotificationFeedbackGenerator().notificationOccurred(.success)
             pip.update(
                 step: 2,
-                headline: "请输入配对码",
-                subtitle: "请在系统设置弹窗中输入 6 位配对码",
+                headline: "Enter Pairing Code",
+                subtitle: "Enter the 6-digit pairing code in the System Settings prompt.",
                 pin: pin
             )
 
@@ -164,7 +164,7 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
                   let irk = (event["host_irk"] as? String).flatMap({ Data(base64Encoded: $0) }),
                   irk.count == 16,
                   let save = onSaveRecord else {
-                finish(error: "系统未返回完整的配对记录。")
+                finish(error: "The system did not return a complete pairing record.")
                 return
             }
             let udid = event["udid"] as? String ?? ""
@@ -173,13 +173,13 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
                 stepIndex = 3
                 UINotificationFeedbackGenerator().notificationOccurred(.success)
                 finish(error: nil, succeeded: true)
-                status = "配对记录已自动保存"
+                status = "Pairing record saved automatically."
             } catch {
                 finish(error: error.localizedDescription)
             }
 
         case "failed":
-            finish(error: event["error"] as? String ?? "设备配对未完成。")
+            finish(error: event["error"] as? String ?? "Device pairing was not completed.")
 
         case "cancelled":
             finish(error: cancelReason)
@@ -191,7 +191,7 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
 
     private func finish(error: String?, succeeded: Bool = false) {
         self.error = error
-        status = error ?? (succeeded ? "配对记录已自动保存" : "配对已结束")
+        status = error ?? (succeeded ? "Pairing record saved automatically." : "Pairing ended.")
         isRunning = false
         stepIndex = succeeded ? 3 : 0
         pin = nil
@@ -206,13 +206,13 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
             background = .invalid
         }
         keepAlive.stop(deactivateAudioSession: false)
-        let finalMessage = error ?? (succeeded ? "配对完成，可返回 Reloc 开始定位" : "配对已结束")
+        let finalMessage = error ?? (succeeded ? "Pairing complete. Return to Reloc to start location." : "Pairing ended.")
         pip.finish(succeeded: succeeded, message: finalMessage)
     }
 
     func netService(_ sender: NetService, didNotPublish errorDict: [String: NSNumber]) {
         guard sender === service else { return }
         let code = errorDict[NetService.errorCode]?.intValue ?? 0
-        cancel(reason: "无法发布配对服务（错误码 \(code)），请在系统「设置 → 隐私与安全性 → 本地网络 / 區域網路」中允许 Reloc 访问后重试。")
+        cancel(reason: "Unable to publish the pairing service (error code \(code)），请在系统「设置 → 隐私与安全性 → 本地网络 / 區域網路」中允许 Reloc 访问后重试。")
     }
 }
