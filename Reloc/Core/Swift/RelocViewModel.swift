@@ -423,7 +423,7 @@ public final class RelocViewModel: ObservableObject {
     ) async -> (title: String, address: String)? {
         let latStr = String(format: "%.6f", wgsLocation.latitude)
         let lonStr = String(format: "%.6f", wgsLocation.longitude)
-        guard let url = URL(string: "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=\(latStr)&lon=\(lonStr)&zoom=18&addressdetails=1&accept-language=zh-CN,en") else {
+        guard let url = URL(string: "https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=\(latStr)&lon=\(lonStr)&zoom=18&addressdetails=1&accept-language=en") else {
             return nil
         }
         var req = URLRequest(url: url)
@@ -437,14 +437,15 @@ public final class RelocViewModel: ObservableObject {
                 return nil
             }
             let addrDict = json["address"] as? [String: Any] ?? [:]
-            let name = (json["name"] as? String).flatMap { $0.isEmpty ? nil : $0 }
-                ?? (addrDict["road"] as? String)
-                ?? (addrDict["neighbourhood"] as? String)
-                ?? (addrDict["suburb"] as? String)
-                ?? (addrDict["city"] as? String)
-                ?? (addrDict["town"] as? String)
-                ?? (addrDict["county"] as? String)
-                ?? (addrDict["state"] as? String)
+            var name = json["name"] as? String
+            if name?.isEmpty != false { name = nil }
+            if name == nil { name = addrDict["road"] as? String }
+            if name == nil { name = addrDict["neighbourhood"] as? String }
+            if name == nil { name = addrDict["suburb"] as? String }
+            if name == nil { name = addrDict["city"] as? String }
+            if name == nil { name = addrDict["town"] as? String }
+            if name == nil { name = addrDict["county"] as? String }
+            if name == nil { name = addrDict["state"] as? String }
 
             let displayName = (json["display_name"] as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
             let parts = [
