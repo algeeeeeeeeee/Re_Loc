@@ -76,12 +76,12 @@ targets:
           - UIInterfaceOrientationPortraitUpsideDown
           - UIInterfaceOrientationLandscapeLeft
           - UIInterfaceOrientationLandscapeRight
-        NSLocalNetworkUsageDescription: Reloc 通过本地网络发现这台设备并完成配对，回环由你的外部代理提供。
+        NSLocalNetworkUsageDescription: Reloc discovers and pairs with this device over the local network. The loopback connection is provided by your external proxy.
         NSBonjourServices:
           - _remotepairing-pairable-host._tcp
           - _remotepairing._tcp
-        NSLocationWhenInUseUsageDescription: 定位注入期间用于保持 Reloc 在后台运行并触发系统定位服务订阅。
-        NSLocationAlwaysAndWhenInUseUsageDescription: 定位注入期间用于保持 Reloc 在后台持续运行并防止系统挂起导致定位失效。
+        NSLocationWhenInUseUsageDescription: Reloc uses location access to remain active in the background and activate the system location subscription during injection.
+        NSLocationAlwaysAndWhenInUseUsageDescription: Reloc uses location access to remain active in the background during location injection and prevent interruptions.
         UIBackgroundModes:
           - location
           - audio
