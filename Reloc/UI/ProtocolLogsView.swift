@@ -46,7 +46,7 @@ struct ProtocolLogsView: View {
         let q = filterText.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
         guard !q.isEmpty else { return base }
         return base.filter {
-            $0.name.lowercased().contains(q) || $0.detail.lowercased().contains(q)
+            RelocEnglish.translate($0.name).lowercased().contains(q) || RelocEnglish.translate($0.detail).lowercased().contains(q)
         }
     }
 
@@ -105,7 +105,7 @@ struct ProtocolLogsView: View {
                                     Circle()
                                         .fill(event.isError ? RelocTheme.crimson : RelocTheme.accent)
                                         .frame(width: 6, height: 6)
-                                    Text(event.name)
+                                    Text(RelocEnglish.translate(event.name))
                                         .font(.caption.monospaced().weight(.semibold))
                                         .foregroundStyle(event.isError ? RelocTheme.crimson : RelocTheme.accent)
                                     Spacer()
@@ -113,7 +113,7 @@ struct ProtocolLogsView: View {
                                         .font(.caption2.monospacedDigit())
                                         .foregroundStyle(.secondary)
                                 }
-                                Text(event.detail)
+                                Text(RelocEnglish.translate(event.detail))
                                     .font(.system(size: 11, design: .monospaced))
                                     .foregroundStyle(event.isError ? RelocTheme.crimson : .primary)
                                     .textSelection(.enabled)
@@ -143,7 +143,7 @@ struct ProtocolLogsView: View {
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
-                        UIPasteboard.general.string = viewModel.exportedLogsText()
+                        UIPasteboard.general.string = RelocEnglish.translate(viewModel.exportedLogsText())
                         RelocTheme.hapticLight()
                         copiedBanner = true
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
