@@ -213,6 +213,6 @@ final class DevicePairingCoordinator: NSObject, ObservableObject, NetServiceDele
     func netService(_ sender: NetService, didNotPublish errorDict: [String: NSNumber]) {
         guard sender === service else { return }
         let code = errorDict[NetService.errorCode]?.intValue ?? 0
-        cancel(reason: "Unable to publish the pairing service (error code \(code)），请在系统「设置 → 隐私与安全性 → 本地网络 / 區域網路」中允许 Reloc 访问后重试。")
+        cancel(reason: "Unable to publish the pairing service (error code \(code)), then allow Reloc to access the local network in Settings → Privacy & Security → Local Network and try again.")
     }
 }
