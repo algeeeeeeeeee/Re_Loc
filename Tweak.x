@@ -1,5 +1,7 @@
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import <CoreFoundation/CoreFoundation.h>
+#import <substrate.h>
 
 static NSString * const kRelocBundleIdentifier = @"dev.reloc.ios";
 
@@ -239,6 +241,37 @@ static NSString *RELTranslate(id value) {
     return source;
 }
 
+
+typedef CFStringRef (*REL_CFBundleCopyLocalizedString_t)(
+    CFBundleRef bundle,
+    CFStringRef key,
+    CFStringRef value,
+    CFStringRef tableName
+);
+
+static REL_CFBundleCopyLocalizedString_t RELOriginalCFBundleCopyLocalizedString = NULL;
+
+static CFStringRef RELHookedCFBundleCopyLocalizedString(
+    CFBundleRef bundle,
+    CFStringRef key,
+    CFStringRef value,
+    CFStringRef tableName
+) {
+    CFStringRef identifier = bundle ? CFBundleGetIdentifier(bundle) : NULL;
+    if (identifier && CFStringCompare(identifier, CFSTR("dev.reloc.ios"), 0) == kCFCompareEqualTo && key) {
+        NSString *source = (__bridge NSString *)key;
+        NSString *translated = RELTranslate(source);
+        if (translated && ![translated isEqualToString:source]) {
+            return (__bridge_retained CFStringRef)translated;
+        }
+    }
+
+    if (RELOriginalCFBundleCopyLocalizedString) {
+        return RELOriginalCFBundleCopyLocalizedString(bundle, key, value, tableName);
+    }
+    return key ? (CFStringRef)CFRetain(key) : NULL;
+}
+
 %hook NSBundle
 - (NSString *)localizedStringForKey:(NSString *)key value:(NSString *)value table:(NSString *)tableName {
     if ([[NSBundle mainBundle].bundleIdentifier isEqualToString:kRelocBundleIdentifier]) {
@@ -306,6 +339,9 @@ static NSString *RELTranslate(id value) {
 %ctor {
     @autoreleasepool {
         if (![[NSBundle mainBundle].bundleIdentifier isEqualToString:kRelocBundleIdentifier]) return;
-        NSLog(@"[RelocEnglish] English UI translation loaded for %@", kRelocBundleIdentifier);
+        MSHookFunction((void *)CFBundleCopyLocalizedString,
+                       (void *)RELHookedCFBundleCopyLocalizedString,
+                       (void **)&RELOriginalCFBundleCopyLocalizedString);
+        NSLog(@"[RelocEnglish] English UI translation hooks installed for %@", kRelocBundleIdentifier);
     }
 }
