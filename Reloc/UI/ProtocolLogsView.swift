@@ -90,7 +90,7 @@ struct ProtocolLogsView: View {
                             .foregroundStyle(RelocTheme.accent.opacity(0.6))
                         Text("No Protocol Events")
                             .font(.headline)
-                        Text("Start Location或Connection Verification后，这里会实时展示连接握手与 NMEA 数据流。")
+                        Text("Connection handshakes and NMEA data will appear here after you start a location session or test the connection.")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
@@ -218,7 +218,7 @@ struct ProtocolLogsView: View {
                     )
                 }
             } else {
-                Text("点击右上角「Start Diagnostics」，即可实时查看 iOS `sourceInformation` 中的Software Simulation与外设定位标记。")
+                Text("Tap “Start Diagnostics” in the upper-right corner to view the software-simulation and accessory-location flags in iOS `sourceInformation`.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
