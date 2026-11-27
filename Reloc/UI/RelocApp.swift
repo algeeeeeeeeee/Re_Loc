@@ -9,6 +9,7 @@ struct RelocApp: App {
             ContentView(viewModel: viewModel)
                 .tint(RelocTheme.accent)
                 .preferredColorScheme(viewModel.appearanceMode.colorScheme)
+                .environment(\.locale, Locale(identifier: "en"))
         }
     }
 }
