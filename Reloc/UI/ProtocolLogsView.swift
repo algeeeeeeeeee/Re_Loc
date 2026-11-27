@@ -90,7 +90,7 @@ struct ProtocolLogsView: View {
                             .foregroundStyle(RelocTheme.accent.opacity(0.6))
                         Text("暂无协议事件")
                             .font(.headline)
-                        Text("开始定位或连接验证后，这里会实时展示连接握手与 NMEA 数据流。")
+                        Text("开始定位或Connection Verification后，这里会实时展示连接握手与 NMEA 数据流。")
                             .font(.caption)
                             .foregroundStyle(.secondary)
                             .multilineTextAlignment(.center)
