@@ -655,7 +655,7 @@ struct MapPickerView: View {
                 .padding(10)
                 .background(RelocTheme.emerald.opacity(0.12), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             } else if let err = viewModel.snapshot.lastError {
-                Text("Last Error: \(err)")
+                Text("Last Error: \(RelocEnglish.translate(err))")
                     .font(.caption)
                     .foregroundStyle(RelocTheme.crimson)
                     .lineLimit(2)
