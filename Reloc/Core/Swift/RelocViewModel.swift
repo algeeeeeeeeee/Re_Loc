@@ -668,14 +668,14 @@ public final class RelocViewModel: ObservableObject {
             } catch {
                 self.connectionVerified = false
                 self.connectionCheckFailed = true
-                self.deviceConnectionStatus = error.localizedDescription
+                self.deviceConnectionStatus = RelocEnglish.translate(error.localizedDescription)
                 self.events.append(ProtocolEvent(
                     name: "connection_check_failed",
-                    detail: "{\"event\":\"connection_check_failed\",\"detail\":\"\(error.localizedDescription)\"}",
+                    detail: "{\"event\":\"connection_check_failed\",\"detail\":\"\(RelocEnglish.translate(error.localizedDescription))\"}",
                     isError: true
                 ))
                 if !silent {
-                    self.alertMessage = error.localizedDescription
+                    self.alertMessage = RelocEnglish.translate(error.localizedDescription)
                 }
             }
         }
@@ -1330,7 +1330,7 @@ public final class RelocViewModel: ObservableObject {
             events.append(ProtocolEvent(name: "pairing_imported", detail: "{\"event\":\"pairing_imported\"}"))
             testConnection(silent: true)
         } catch {
-            alertMessage = "Failed to import pairing file: \(error.localizedDescription)"
+            alertMessage = "Failed to import pairing file: \(RelocEnglish.translate(error.localizedDescription))"
         }
     }
 
