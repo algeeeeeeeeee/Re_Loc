@@ -31,9 +31,9 @@ jobs:
           export THEOS="$RUNNER_TEMP/theos"
           echo "THEOS=$THEOS" >> "$GITHUB_ENV"
           git clone --recursive --depth 1 https://github.com/theos/theos.git "$THEOS"
-          mkdir -p "$THEOS/sdks"
-          git clone --depth 1 https://github.com/theos/sdks.git "$RUNNER_TEMP/theos-sdks"
-          cp -R "$RUNNER_TEMP"/theos-sdks/*.sdk "$THEOS/sdks/"
+          SDKROOT="$(xcrun --sdk iphoneos --show-sdk-path)"
+          echo "SDKROOT=$SDKROOT" >> "$GITHUB_ENV"
+          test -d "$SDKROOT"
 
       - name: Build rootless and rootful packages
         shell: bash
