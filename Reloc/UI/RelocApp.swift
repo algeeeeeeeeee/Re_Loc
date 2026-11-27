@@ -85,7 +85,7 @@ private struct UnsupportedIPadView: View {
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(RelocTheme.amber)
 
-                Text("Reloc 依赖 iOS 的 CarKit（com.apple.carkit.service）外设定位通道向系统注入 GPS 坐标。由于 iPadOS 不支持 CarPlay 且未提供该系统服务，此应用无法在 iPad 上运行定位模拟。")
+                Text("Reloc 依赖 iOS 的 CarKit（com.apple.carkit.service）外设定位通道向系统注入 GPS Coordinates。由于 iPadOS 不支持 CarPlay 且未提供该系统服务，此Apply无法在 iPad 上运行定位模拟。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
