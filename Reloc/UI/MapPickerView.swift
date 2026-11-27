@@ -647,7 +647,7 @@ struct MapPickerView: View {
             } else if viewModel.realLocationRestoredNotice {
                 HStack(spacing: 8) {
                     Image(systemName: "checkmark.circle.fill").foregroundStyle(RelocTheme.emerald)
-                    Text("已Restore本机真实 GPS 定位")
+                    Text("The iPhone's actual GPS location has been restored.")
                         .font(.caption.weight(.semibold))
                         .foregroundStyle(RelocTheme.emerald)
                     Spacer()
@@ -706,7 +706,7 @@ struct MapPickerView: View {
             VStack(alignment: .leading, spacing: 8) {
                 HStack(spacing: 7) {
                     Image(systemName: "arrow.triangle.2.circlepath.circle.fill").foregroundStyle(RelocTheme.amber)
-                    Text("外设连接已断开，但系统仍在缓存上次定位（室内弱信号常见）。点击下方一键刷新定位服务即可立即Restore真实位置。")
+                    Text("The accessory connection has ended, but the system is still using a cached location (common indoors with a weak signal). Tap Refresh Location Services below to restore the actual location.")
                         .font(.caption2)
                         .foregroundStyle(.primary)
                 }
@@ -714,7 +714,7 @@ struct MapPickerView: View {
                     RelocTheme.hapticMedium()
                     viewModel.launchOneTapRestoreRefresh()
                 } label: {
-                    Label("一键刷新定位服务（Restore真实位置）", systemImage: "pip.enter")
+                    Label("Refresh Location Services (Restore Actual Location)", systemImage: "pip.enter")
                         .font(.caption.weight(.bold))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
@@ -727,7 +727,7 @@ struct MapPickerView: View {
         } else {
             HStack(spacing: 8) {
                 ProgressView().controlSize(.small)
-                Text("已发送断开与失效报文，正在唤醒本机真实 GPS Restore定位…")
+                Text("Disconnect and invalidation messages sent. Waking the iPhone's actual GPS…")
                     .font(.caption2)
                     .foregroundStyle(.secondary)
                 Spacer()
@@ -816,7 +816,7 @@ struct MapPickerView: View {
                         ? "Connecting to the device loopback and completing MFi authentication…"
                         : (viewModel.injectionPhase == .waitingSubscription
                             ? "Authentication succeeded. Activating the system's accessory GPS subscription…"
-                            : "正在高速注入 NMEA Coordinates，等待系统锁定外设源…")
+                            : "Injecting NMEA coordinates and waiting for the system to lock onto the accessory source…")
                 )
                 .font(.caption2)
                 .foregroundStyle(.secondary)
@@ -1364,7 +1364,7 @@ private struct PlacesSheet: View {
                             }
                         }
 
-                        Section("已Save收藏") {
+                        Section("Saved Favorites") {
                             if viewModel.favorites.isEmpty {
                                 Text("No Favorite Locations").foregroundStyle(.secondary)
                             } else {
@@ -1455,7 +1455,7 @@ private struct PlacesSheet: View {
                     Button("Close") { dismiss() }
                 }
             }
-            .alert("Rename收藏", isPresented: Binding(
+            .alert("Rename Favorite", isPresented: Binding(
                 get: { renamingFavorite != nil },
                 set: { if !$0 { renamingFavorite = nil } }
             )) {
@@ -1514,7 +1514,7 @@ private struct ManualCoordinateSheet: View {
                     }
                 }
 
-                Section("Save到收藏（可选）") {
+                Section("Save to Favorites (optional)") {
                     TextField("Place Name", text: $favoriteName)
                 }
             }
