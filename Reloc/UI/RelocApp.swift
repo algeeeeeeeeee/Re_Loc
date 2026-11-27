@@ -25,19 +25,19 @@ struct ContentView: View {
                 TabView(selection: $selectedTab) {
                     MapPickerView(viewModel: viewModel, switchToConfig: { selectedTab = 1 })
                         .tabItem {
-                            Label("定位", systemImage: "location.north.circle.fill")
+                            Label("Location", systemImage: "location.north.circle.fill")
                         }
                         .tag(0)
 
                     ConfigurationView(viewModel: viewModel)
                         .tabItem {
-                            Label("设备连接", systemImage: "antenna.radiowaves.left.and.right")
+                            Label("Device Connection", systemImage: "antenna.radiowaves.left.and.right")
                         }
                         .tag(1)
 
                     ProtocolLogsView(viewModel: viewModel)
                         .tabItem {
-                            Label("实测与日志", systemImage: "waveform.path.ecg")
+                            Label("Diagnostics & Logs", systemImage: "waveform.path.ecg")
                         }
                         .tag(2)
                 }
@@ -47,11 +47,11 @@ struct ContentView: View {
                 }
             }
         }
-        .alert("提示", isPresented: Binding(
+        .alert("Notice", isPresented: Binding(
             get: { viewModel.alertMessage != nil },
             set: { if !$0 { viewModel.alertMessage = nil } }
         )) {
-            Button("确定", role: .cancel) {
+            Button("OK", role: .cancel) {
                 viewModel.alertMessage = nil
             }
         } message: {
@@ -78,14 +78,14 @@ private struct UnsupportedIPadView: View {
             }
 
             VStack(spacing: 10) {
-                Text("当前设备不可用")
+                Text("Device Not Available")
                     .font(.title2.weight(.bold))
 
-                Text("Reloc 仅支持 iPhone")
+                Text("Reloc Supports iPhone Only")
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(RelocTheme.amber)
 
-                Text("Reloc 依赖 iOS 的 CarKit（com.apple.carkit.service）外设定位通道向系统注入 GPS Coordinates。由于 iPadOS 不支持 CarPlay 且未提供该系统服务，此Apply无法在 iPad 上运行定位模拟。")
+                Text("Reloc 依赖 iOS 的 CarKit（com.apple.carkit.service）外设Location通道向系统注入 GPS Coordinates。由于 iPadOS 不支持 CarPlay 且未提供该系统服务，此Apply无法在 iPad 上运行Location模拟。")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
