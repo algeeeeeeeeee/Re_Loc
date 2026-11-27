@@ -6,7 +6,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = RelocEnglish
 RelocEnglish_FILES = Tweak.x
-RelocEnglish_FRAMEWORKS = Foundation UIKit
+RelocEnglish_FRAMEWORKS = Foundation UIKit CoreFoundation
 RelocEnglish_CFLAGS = -fobjc-arc -Wall
 
 include $(THEOS_MAKE_PATH)/tweak.mk
