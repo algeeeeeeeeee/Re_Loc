@@ -23,6 +23,8 @@ targets:
       - path: Reloc/Core
       - path: Reloc/UI
       - path: Reloc/Resources/Assets.xcassets
+      - path: Reloc/Resources/en.lproj/InfoPlist.strings
+        buildPhase: resources
       - path: Reloc/Resources/MFi
         buildPhase: resources
         type: folder
@@ -30,8 +32,11 @@ targets:
       path: Reloc/Info.plist
       properties:
         CFBundleDisplayName: Reloc
-        CFBundleShortVersionString: "1.0.2"
-        CFBundleVersion: "3"
+        CFBundleDevelopmentRegion: en
+        CFBundleLocalizations:
+          - en
+        CFBundleShortVersionString: "1.0.3"
+        CFBundleVersion: "4"
         LSRequiresIPhoneOS: true
         LSSupportsOpeningDocumentsInPlace: true
         UIFileSharingEnabled: true
