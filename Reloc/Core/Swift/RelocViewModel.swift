@@ -626,7 +626,7 @@ public final class RelocViewModel: ObservableObject {
         }
         guard !isVerifyingConnection, !snapshot.isRunning else { return }
         guard let pairing = savedPairing else {
-            deviceConnectionStatus = "Pair this iPhone first 或导入配对文件"
+            deviceConnectionStatus = "Pair this iPhone first or import a pairing file."
             return
         }
 
