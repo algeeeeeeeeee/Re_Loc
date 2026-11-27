@@ -41,14 +41,14 @@ jobs:
           set -euo pipefail
           mkdir -p output
 
-          THEOS_PACKAGE_SCHEME=rootless make clean package FINALPACKAGE=1
+          THEOS_PACKAGE_SCHEME=rootless make THEOS_PACKAGE_ARCH=iphoneos-arm64 clean package FINALPACKAGE=1
           ROOTLESS_DEB="$(find packages -maxdepth 1 -name '*.deb' -print -quit)"
           test -n "$ROOTLESS_DEB"
           cp "$ROOTLESS_DEB" output/RelocEnglish-rootless.deb
 
           make clean
           rm -f packages/*.deb
-          make package FINALPACKAGE=1
+          make THEOS_PACKAGE_ARCH=iphoneos-arm package FINALPACKAGE=1
           ROOTFUL_DEB="$(find packages -maxdepth 1 -name '*.deb' -print -quit)"
           test -n "$ROOTFUL_DEB"
           cp "$ROOTFUL_DEB" output/RelocEnglish-rootful.deb
