@@ -450,7 +450,7 @@ final class PairingPiPPresenter: NSObject, ObservableObject {
         let dotRect = CGRect(x: 24, y: 26, width: 12, height: 12)
         UIBezierPath(ovalIn: dotRect).fill()
 
-        let headerText = (mode == .locationRefresh ? "Reloc · One-Tap Location" : "Reloc · Device Pairing指引") as NSString
+        let headerText = (mode == .locationRefresh ? "Reloc · One-Tap Location" : "Reloc · Device Pairing Guide") as NSString
         headerText.draw(
             at: CGPoint(x: 46, y: 20),
             withAttributes: [
