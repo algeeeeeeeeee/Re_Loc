@@ -9,9 +9,9 @@ struct ProtocolLogsView: View {
     @State private var copiedBanner = false
 
     enum LogCategory: String, CaseIterable, Identifiable {
-        case all = "全部"
+        case all = "All"
         case nmea = "NMEA"
-        case errors = "错误"
+        case errors = "Errors"
         var id: String { rawValue }
     }
 
@@ -74,7 +74,7 @@ struct ProtocolLogsView: View {
                         }
                     }
                     Spacer()
-                    Text("\(filteredEvents.count) 条事件")
+                    Text("\(filteredEvents.count) events")
                         .font(.caption2.monospacedDigit())
                         .foregroundStyle(.secondary)
                 }
@@ -88,7 +88,7 @@ struct ProtocolLogsView: View {
                         Image(systemName: "waveform.path.ecg.rectangle")
                             .font(.system(size: 40))
                             .foregroundStyle(RelocTheme.accent.opacity(0.6))
-                        Text("暂无协议事件")
+                        Text("No Protocol Events")
                             .font(.headline)
                         Text("Start Location或Connection Verification后，这里会实时展示连接握手与 NMEA 数据流。")
                             .font(.caption)
@@ -137,9 +137,9 @@ struct ProtocolLogsView: View {
                 }
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("定位实测与日志")
+            .navigationTitle("Location Diagnostics & Logs")
             .navigationBarTitleDisplayMode(.inline)
-            .searchable(text: $filterText, prompt: "筛选事件（如 FFFA / acknowledged）")
+            .searchable(text: $filterText, prompt: "Filter events (e.g. FFFA / acknowledged)")
             .toolbar {
                 ToolbarItemGroup(placement: .navigationBarTrailing) {
                     Button {
@@ -170,9 +170,9 @@ struct ProtocolLogsView: View {
             HStack(spacing: 8) {
                 SettingsIconBadge(systemName: "sensor.tag.radiowaves.forward.fill", color: monitor.isMonitoring ? RelocTheme.emerald : RelocTheme.accent)
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("CoreLocation 实时实测")
+                    Text("Live CoreLocation Diagnostics")
                         .font(.subheadline.weight(.semibold))
-                    Text(monitor.isMonitoring ? "正在实时读取系统上报定位来源" : "验证系统是否识别为外设 GPS")
+                    Text(monitor.isMonitoring ? "Reading the location source reported by iOS in real time." : "Verify whether the system recognizes accessory GPS.")
                         .font(.caption2)
                         .foregroundStyle(.secondary)
                 }
@@ -185,7 +185,7 @@ struct ProtocolLogsView: View {
                         monitor.requestAndStart()
                     }
                 } label: {
-                    Text(monitor.isMonitoring ? "停止" : "开始实测")
+                    Text(monitor.isMonitoring ? "Stop" : "Start Diagnostics")
                         .font(.caption.weight(.semibold))
                         .padding(.horizontal, 12)
                         .padding(.vertical, 6)
@@ -199,26 +199,26 @@ struct ProtocolLogsView: View {
 
             if let t = monitor.latest {
                 HStack(spacing: 8) {
-                    telemetryMetric(label: "纬度 / 经度", value: String(format: "%.5f, %.5f", t.latitude, t.longitude))
-                    telemetryMetric(label: "精度 / 海拔", value: String(format: "±%.1fm · %.0fm", t.horizontalAccuracy, t.altitude))
+                    telemetryMetric(label: "Latitude / Longitude", value: String(format: "%.5f, %.5f", t.latitude, t.longitude))
+                    telemetryMetric(label: "Accuracy / Altitude", value: String(format: "±%.1fm · %.0fm", t.horizontalAccuracy, t.altitude))
                 }
 
                 HStack(spacing: 8) {
                     flagBadge(
-                        title: "软件模拟",
+                        title: "Software Simulation",
                         key: "isSimulatedBySoftware",
                         value: t.isSimulatedBySoftware,
                         goodWhen: false
                     )
                     flagBadge(
-                        title: "外设来源",
+                        title: "Accessory Source",
                         key: "isProducedByAccessory",
                         value: t.isProducedByAccessory,
                         goodWhen: true
                     )
                 }
             } else {
-                Text("点击右上角「开始实测」，即可实时查看 iOS `sourceInformation` 中的软件模拟与外设定位标记。")
+                Text("点击右上角「Start Diagnostics」，即可实时查看 iOS `sourceInformation` 中的Software Simulation与外设定位标记。")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
