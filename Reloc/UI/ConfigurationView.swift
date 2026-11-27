@@ -14,9 +14,9 @@ struct ConfigurationView: View {
     @State private var copiedPinToast = false
 
     private var serviceStateText: String {
-        if viewModel.connectionVerified { return "已连接" }
-        if viewModel.isVerifyingConnection { return "验证中" }
-        return viewModel.connectionCheckFailed ? "连接失败" : "待验证"
+        if viewModel.connectionVerified { return "Connected" }
+        if viewModel.isVerifyingConnection { return "Verifying" }
+        return viewModel.connectionCheckFailed ? "Connection Failed" : "Not Verified"
     }
 
     var body: some View {
@@ -32,16 +32,16 @@ struct ConfigurationView: View {
                     HStack(spacing: 12) {
                         SettingsIconBadge(systemName: "network", color: RelocTheme.accent)
                         VStack(alignment: .leading, spacing: 3) {
-                            Text("外部代理提供本地回环")
+                            Text("External Proxy Provides Local Loopback")
                                 .font(.subheadline.weight(.semibold))
-                            Text("请先在代理软件中启用 \(viewModel.host) 的回环映射，再完成下方配对与验证。Reloc 不创建 VPN。")
+                            Text("Enable the loopback mapping for \(viewModel.host) in your proxy app, then complete pairing and verification below. Reloc does not create a VPN.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                         }
                     }
                     .padding(.vertical, 2)
                 } header: {
-                    stepSectionHeader(number: "01", title: "回环通路")
+                    stepSectionHeader(number: "01", title: "Loopback Connection")
                 }
 
                 Section {
@@ -51,11 +51,11 @@ struct ConfigurationView: View {
                             color: viewModel.pairingStatus.isLoaded ? RelocTheme.emerald : RelocTheme.amber
                         )
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("配对记录")
+                            Text("Pairing Record")
                                 .font(.subheadline.weight(.medium))
                             Text(viewModel.pairingStatus.isLoaded
-                                 ? "已保存（\(viewModel.pairingStatus.kind?.rawValue ?? "")）"
-                                 : "尚未配置这台 iPhone")
+                                 ? "Saved (\(viewModel.pairingStatus.kind?.rawValue ?? "")）"
+                                 : "This iPhone Has Not Been Paired")
                                 .font(.caption)
                                 .foregroundStyle(viewModel.pairingStatus.isLoaded ? RelocTheme.emerald : .secondary)
                         }
@@ -71,10 +71,10 @@ struct ConfigurationView: View {
                                 HStack {
                                     Image(systemName: "iphone.gen3.radiowaves.left.and.right")
                                         .font(.subheadline.weight(.semibold))
-                                    Text(viewModel.pairingStatus.isLoaded ? "重新配对这台 iPhone" : "一键配对这台 iPhone")
+                                    Text(viewModel.pairingStatus.isLoaded ? "Pair This iPhone Again" : "Pair This iPhone")
                                         .font(.subheadline.weight(.semibold))
                                     Spacer()
-                                    Text("悬浮窗指引")
+                                    Text("Floating Guide")
                                         .font(.caption2.weight(.semibold))
                                         .padding(.horizontal, 8)
                                         .padding(.vertical, 3)
@@ -84,7 +84,7 @@ struct ConfigurationView: View {
                             .disabled(viewModel.isVerifyingConnection || viewModel.snapshot.isRunning)
                         }
                     } else {
-                        Text("此系统版本请导入已有的配对文件。")
+                        Text("Import an existing pairing file on this iOS version.")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
@@ -96,20 +96,20 @@ struct ConfigurationView: View {
                     Button {
                         showImporter = true
                     } label: {
-                        Label("导入已有配对文件", systemImage: "square.and.arrow.down")
+                        Label("Import Existing Pairing File", systemImage: "square.and.arrow.down")
                     }
                     .disabled(pairing.isRunning || viewModel.isVerifyingConnection || viewModel.snapshot.isRunning)
 
                     if viewModel.pairingStatus.isLoaded {
-                        Button("移除已保存配对记录", role: .destructive) {
+                        Button("移除已保存Pairing Record", role: .destructive) {
                             viewModel.removePairingFile()
                         }
                         .disabled(pairing.isRunning || viewModel.isVerifyingConnection || viewModel.snapshot.isRunning)
                     }
                 } header: {
-                    stepSectionHeader(number: "02", title: "设备配对")
+                    stepSectionHeader(number: "02", title: "Device Pairing")
                 } footer: {
-                    Text("开始配对后会自动启用画中画悬浮指引窗：切到「设置 → 隐私与安全性 → 开发者模式」点击「与 Reloc 配对」，即可在悬浮窗中实时查看 6 位配对码。")
+                    Text("Starting pairing automatically opens the floating Picture in Picture guide. Go to Settings → Privacy & Security → Developer Mode and tap “Pair with Reloc” to view the 6-digit code in the floating guide.")
                 }
 
                 Section {
@@ -131,7 +131,7 @@ struct ConfigurationView: View {
                                 .font(.subheadline.weight(.medium))
                                 .textSelection(.enabled)
                             if let port = viewModel.discoveredDevicePort {
-                                Text("已连接回环端口：\(port)")
+                                Text("Connected回环端口：\(port)")
                                     .font(.caption.monospacedDigit())
                                     .foregroundStyle(.secondary)
                             }
@@ -143,14 +143,14 @@ struct ConfigurationView: View {
                         viewModel.testConnection(silent: false)
                     } label: {
                         Label(
-                            viewModel.connectionVerified ? "重新检测连接" : "检测设备连接",
+                            viewModel.connectionVerified ? "Recheck Connection" : "Test Device Connection",
                             systemImage: "arrow.triangle.2.circlepath"
                         )
                     }
                     .disabled(!viewModel.pairingStatus.isLoaded || viewModel.isVerifyingConnection || pairing.isRunning || viewModel.snapshot.isRunning)
 
                     if !viewModel.deviceUDID.isEmpty {
-                        LabeledContent("设备 UDID") {
+                        LabeledContent("Device UDID") {
                             Text(viewModel.deviceUDID)
                                 .font(.caption.monospaced())
                                 .foregroundStyle(.secondary)
@@ -158,15 +158,15 @@ struct ConfigurationView: View {
                         }
                     }
                 } header: {
-                    stepSectionHeader(number: "03", title: "连接验证")
+                    stepSectionHeader(number: "03", title: "Connection Verification")
                 } footer: {
-                    Text("自动发现 Remote Pairing 服务并用配对记录验证广播身份，最终通过设备服务确认连接可用。")
+                    Text("自动发现 Remote Pairing 服务并用Pairing Record验证广播身份，最终通过Device Service确认连接可用。")
                 }
 
-                Section("定位选项") {
+                Section("Location Options") {
                     Stepper(value: $viewModel.intervalSeconds, in: 1.0...10.0, step: 0.5) {
                         Label {
-                            Text(String(format: "NMEA 发送间隔 · %.1f 秒", viewModel.intervalSeconds))
+                            Text(String(format: "NMEA Send Interval · %.1f sec", viewModel.intervalSeconds))
                                 .monospacedDigit()
                         } icon: {
                             SettingsIconBadge(systemName: "timer", color: RelocTheme.accent)
@@ -174,14 +174,14 @@ struct ConfigurationView: View {
                     }
 
                     Picker(selection: $viewModel.durationSeconds) {
-                        Text("持续运行").tag(0.0)
-                        Text("60 秒").tag(60.0)
-                        Text("180 秒").tag(180.0)
-                        Text("600 秒").tag(600.0)
-                        Text("1800 秒").tag(1800.0)
+                        Text("Continuous").tag(0.0)
+                        Text("60 sec").tag(60.0)
+                        Text("180 sec").tag(180.0)
+                        Text("600 sec").tag(600.0)
+                        Text("1800 sec").tag(1800.0)
                     } label: {
                         Label {
-                            Text("会话时长")
+                            Text("Session Duration")
                         } icon: {
                             SettingsIconBadge(systemName: "hourglass", color: .purple)
                         }
@@ -189,7 +189,7 @@ struct ConfigurationView: View {
 
                     Toggle(isOn: $viewModel.gcj02CorrectionEnabled) {
                         Label {
-                            Text("中国大陆地图 GCJ-02 纠偏")
+                            Text("GCJ-02 Correction for Mainland China Maps")
                         } icon: {
                             SettingsIconBadge(systemName: "globe.asia.australia.fill", color: RelocTheme.emerald)
                         }
@@ -197,7 +197,7 @@ struct ConfigurationView: View {
 
                     Toggle(isOn: $viewModel.microJitterEnabled) {
                         Label {
-                            Text("自然微漂移（±0.6m GPS 抖动）")
+                            Text("Natural GPS Micro-Jitter (±0.6 m)")
                         } icon: {
                             SettingsIconBadge(systemName: "dot.radiowaves.left.and.right", color: RelocTheme.amber)
                         }
@@ -205,7 +205,7 @@ struct ConfigurationView: View {
 
                     Toggle(isOn: $viewModel.backgroundKeepAliveEnabled) {
                         Label {
-                            Text("后台保活（切换地图不断连）")
+                            Text("Background Keep-Alive (Stay Connected While Switching Maps)")
                         } icon: {
                             SettingsIconBadge(systemName: "bolt.shield.fill", color: .teal)
                         }
@@ -219,7 +219,7 @@ struct ConfigurationView: View {
                         }
                     } label: {
                         Label {
-                            Text("外观主题")
+                            Text("Appearance Theme")
                         } icon: {
                             SettingsIconBadge(systemName: "circle.lefthalf.filled", color: .gray)
                         }
@@ -231,7 +231,7 @@ struct ConfigurationView: View {
                         }
                     } label: {
                         Label {
-                            Text("地图数据源")
+                            Text("Map Source")
                         } icon: {
                             SettingsIconBadge(systemName: "globe.americas.fill", color: RelocTheme.accent)
                         }
@@ -244,19 +244,19 @@ struct ConfigurationView: View {
                             }
                         } label: {
                             Label {
-                                Text("Apple 地图样式")
+                                Text("Apple Maps Style")
                             } icon: {
                                 SettingsIconBadge(systemName: "map.fill", color: RelocTheme.accent)
                             }
                         }
                     }
                 } header: {
-                    Text("地图与外观")
+                    Text("Map & Appearance")
                 } footer: {
-                    Text("默认使用 Apple 系统地图（MapKit 原生）；如需无高德字样的纯国际 WGS-84 底图，可切换为全球街道图、OpenStreetMap 或全球卫星图。")
+                    Text("Apple Maps (native MapKit) is used by default. For global WGS-84 maps without Amap labels, switch to Global Streets, OpenStreetMap, or Global Satellite.")
                 }
             }
-            .navigationTitle("设备配对与连接")
+            .navigationTitle("Device Pairing与连接")
             .navigationBarTitleDisplayMode(.inline)
             .task {
                 viewModel.importDiscoveredPairing()
@@ -300,9 +300,9 @@ struct ConfigurationView: View {
                 }
 
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(ready ? "设备回环已就绪" : "配置本机回环连接")
+                    Text(ready ? "Device Loopback Ready" : "Configure Local Loopback")
                         .font(.headline)
-                    Text(ready ? "可直接返回「定位」标签页开始定格定位" : "依次完成回环通路、本机配对与连接验证")
+                    Text(ready ? "Return to the Location tab to set a fixed location" : "依次完成Loopback Connection、本机配对与Connection Verification")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -311,17 +311,17 @@ struct ConfigurationView: View {
 
             HStack(spacing: 10) {
                 MetricTile(
-                    title: "配对状态",
-                    value: viewModel.pairingStatus.isLoaded ? "已保存" : "未配置",
+                    title: "Pairing Status",
+                    value: viewModel.pairingStatus.isLoaded ? "已保存" : "Not Configured",
                     tint: viewModel.pairingStatus.isLoaded ? RelocTheme.emerald : .secondary
                 )
                 MetricTile(
-                    title: "设备服务",
+                    title: "Device Service",
                     value: serviceStateText,
                     tint: ready ? RelocTheme.emerald : (viewModel.connectionCheckFailed ? RelocTheme.amber : .secondary)
                 )
                 MetricTile(
-                    title: "回环主机",
+                    title: "Loopback Host",
                     value: viewModel.host,
                     tint: RelocTheme.accent
                 )
@@ -339,11 +339,11 @@ struct ConfigurationView: View {
         VStack(alignment: .leading, spacing: 12) {
             if pairing.isRunning {
                 HStack(spacing: 6) {
-                    pairingStepPill(num: 1, title: "广播就绪", active: pairing.stepIndex >= 1, current: pairing.stepIndex == 1)
+                    pairingStepPill(num: 1, title: "Broadcast Ready", active: pairing.stepIndex >= 1, current: pairing.stepIndex == 1)
                     Image(systemName: "chevron.right").font(.system(size: 9, weight: .bold)).foregroundStyle(.secondary)
-                    pairingStepPill(num: 2, title: "输入配对码", active: pairing.stepIndex >= 2, current: pairing.stepIndex == 2)
+                    pairingStepPill(num: 2, title: "Enter Pairing Code", active: pairing.stepIndex >= 2, current: pairing.stepIndex == 2)
                     Image(systemName: "chevron.right").font(.system(size: 9, weight: .bold)).foregroundStyle(.secondary)
-                    pairingStepPill(num: 3, title: "保存完成", active: pairing.stepIndex >= 3, current: pairing.stepIndex == 3)
+                    pairingStepPill(num: 3, title: "Saved", active: pairing.stepIndex >= 3, current: pairing.stepIndex == 3)
                 }
             }
 
@@ -377,7 +377,7 @@ struct ConfigurationView: View {
                     copiedPinToast = true
                     DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { copiedPinToast = false }
                 } label: {
-                    Label(copiedPinToast ? "已复制配对码" : "复制配对码", systemImage: copiedPinToast ? "checkmark" : "doc.on.doc")
+                    Label(copiedPinToast ? "Pairing Code Copied" : "Copy Pairing Code", systemImage: copiedPinToast ? "checkmark" : "doc.on.doc")
                         .font(.subheadline.weight(.semibold))
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
@@ -393,7 +393,7 @@ struct ConfigurationView: View {
                         RelocTheme.hapticLight()
                         pairing.toggleFloatingGuide()
                     } label: {
-                        Label(pip.isActive ? "收起悬浮指引窗" : "弹出悬浮指引窗", systemImage: pip.isActive ? "pip.exit" : "pip.enter")
+                        Label(pip.isActive ? "Hide Floating Guide" : "Show Floating Guide", systemImage: pip.isActive ? "pip.exit" : "pip.enter")
                             .font(.subheadline.weight(.semibold))
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 10)
@@ -403,7 +403,7 @@ struct ConfigurationView: View {
                     .foregroundStyle(RelocTheme.accent)
                 }
 
-                Button("取消配对", role: .destructive) {
+                Button("Cancel Pairing", role: .destructive) {
                     pairing.cancel()
                 }
                 .buttonStyle(.plain)
