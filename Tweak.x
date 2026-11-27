@@ -207,6 +207,52 @@ static NSDictionary<NSString *, NSString *> *RELTranslations(void) {
             @"请先在「设备连接」页面完成本机配对或导入配对文件，并确保外部代理已启用 10.7.0.1 回环映射。": @"Complete on-device pairing or import a pairing file on the Device Connection page, and make sure your external proxy has enabled the 10.7.0.1 loopback mapping.",
             @"内置配件认证组件不可用，请重新安装应用。": @"The built-in accessory authentication component is unavailable. Reinstall the app.",
             @"定位会话已停止": @"Location Session Stopped",
+            @"Apple 地图（系统默认）": @"Apple Maps (System Default)",
+            @"OpenStreetMap（开源 · WGS-84）": @"OpenStreetMap (Open Source · WGS-84)",
+            @"全球卫星图（Esri · WGS-84）": @"Global Satellite (Esri · WGS-84)",
+            @"全球街道图（Esri · WGS-84）": @"Global Streets (Esri · WGS-84)",
+            @"标准": @"Standard",
+            @"混合": @"Hybrid",
+            @"卫星": @"Satellite",
+            @"① 关闭系统「定位服务」": @"① Turn Off System Location Services",
+            @"② 正在清空外设残留缓存": @"② Clearing Stale Accessory Cache",
+            @"② 正在清空系统定位缓存": @"② Clearing System Location Cache",
+            @"③ 正在重新获取本机真实定位…": @"③ Reacquiring the iPhone's Real Location…",
+            @"③ 系统已重新打开定位服务": @"③ System Location Services Re-enabled",
+            @"③ 系统已重新订阅外设 GPS": @"③ System Re-subscribed to Accessory GPS",
+            @"③ 请重新打开「定位服务」": @"③ Turn Location Services Back On",
+            @"清空外设残留缓存，关闭后自动开始 5 秒倒计时": @"Clear the stale accessory cache. A 5-second countdown starts automatically when switched off.",
+            @"打开开关后将立即切回本机真实 GPS": @"Turn the switch back on to restore the iPhone's real GPS immediately.",
+            @"打开开关后 Reloc 将自动 100% 锁定外设 GPS": @"After switching it on, Reloc will automatically lock onto accessory GPS.",
+            @"请保持「定位服务」关闭，等待倒计时结束": @"Keep Location Services off until the countdown finishes.",
+            @"请保持本机网络回环已开启": @"Keep the local network loopback enabled.",
+            @"配对记录已保存，等待连接验证": @"Pairing record saved. Waiting for connection verification.",
+            @"配对主机身份无效。": @"Invalid pairing host identity.",
+            @"配对文件体积异常。": @"The pairing file size is invalid.",
+            @"配对文件必须是有效的 plist 格式。": @"The pairing file must be a valid plist.",
+            @"请选择具体的配对文件，而不是文件夹。": @"Select a pairing file, not a folder.",
+            @"无法读取已保存的配对身份": @"Unable to read the saved pairing identity.",
+            @"已保存的配对身份无效，请重新导入": @"The saved pairing identity is invalid. Please import it again.",
+            @"Remote Pairing 配对文件中的 Ed25519 公私钥不匹配。": @"The Ed25519 public and private keys in the Remote Pairing file do not match.",
+            @"回环 IP 地址无效": @"Invalid loopback IP address.",
+            @"设备连接参数无效": @"Invalid device connection parameters.",
+            @"设备连接验证超时（请检查 10.7.0.1 回环代理是否已开启）": @"Device connection verification timed out. Check that the 10.7.0.1 loopback proxy is enabled.",
+            @"打开设备服务连接超时": @"Timed out while opening the device service connection.",
+            @"配对引擎已结束，请重试": @"The pairing engine has stopped. Please try again.",
+            @"等待超时，请返回 Reloc 重试": @"Timed out. Return to Reloc and try again.",
+            @"设备连接验证任务异常中止": @"The device connection verification task terminated unexpectedly.",
+            @"打开设备服务任务异常中止": @"The device service task terminated unexpectedly.",
+            @"外设定位已 100% 生效": @"Accessory Location Is Active",
+            @"定位刷新已取消": @"Location Refresh Cancelled",
+            @"定位会话已停止": @"Location Session Stopped",
+            @"设备服务连接超时": @"Device service connection timed out.",
+            @"步骤 %d/3 · 实时监测": @"Step %d/3 · Live Monitoring",
+            @"%02d:%02d  步骤 %d/3": @"%02d:%02d  Step %d/3",
+            @"通道建立失败，": @"Channel establishment failed, ",
+            @"Lockdown 中断，": @"Lockdown interrupted, ",
+            @"连接断开，": @"Connection lost, ",
+            @"无法发布配对服务（错误码 ": @"Unable to publish pairing service (error code ",
+            @"无法写入系统钥匙串（OSStatus ": @"Unable to write to the system Keychain (OSStatus ",
             @"高德地图": @"Amap"
         };
     });
@@ -237,6 +283,25 @@ static NSString *RELTranslate(id value) {
     if ([source hasPrefix:@"已锁定「"] && [source containsString:@"」，可返回任意 App 使用"])
         return [[source stringByReplacingOccurrencesOfString:@"已锁定「" withString:@"Locked onto “"]
                 stringByReplacingOccurrencesOfString:@"」，可返回任意 App 使用" withString:@"”. You can switch to any app."];
+
+    if ([source hasPrefix:@"待刷新生效 · ACK "])
+        return [@"Waiting for Refresh · ACK " stringByAppendingString:[source substringFromIndex:@"待刷新生效 · ACK ".length]];
+    if ([source hasPrefix:@"切换定位中 · ACK "])
+        return [@"Switching Location · ACK " stringByAppendingString:[source substringFromIndex:@"切换定位中 · ACK ".length]];
+    if ([source hasPrefix:@"通道建立失败，"])
+        return [@"Channel establishment failed, " stringByAppendingString:[source substringFromIndex:@"通道建立失败，".length]];
+    if ([source hasPrefix:@"Lockdown 中断，"])
+        return [@"Lockdown interrupted, " stringByAppendingString:[source substringFromIndex:@"Lockdown 中断，".length]];
+    if ([source hasPrefix:@"连接断开，"])
+        return [@"Connection lost, " stringByAppendingString:[source substringFromIndex:@"连接断开，".length]];
+    if ([source hasPrefix:@"无法写入系统钥匙串（OSStatus "])
+        return [@"Unable to write to the system Keychain (OSStatus " stringByAppendingString:[source substringFromIndex:@"无法写入系统钥匙串（OSStatus ".length]];
+    if ([source hasPrefix:@"无法发布配对服务（错误码 "])
+        return [@"Unable to publish pairing service (error code " stringByAppendingString:[source substringFromIndex:@"无法发布配对服务（错误码 ".length]];
+    if ([source hasPrefix:@"通道建立失败，"])
+        return [@"Channel establishment failed, " stringByAppendingString:[source substringFromIndex:@"通道建立失败，".length]];
+    if ([source hasPrefix:@"步骤 "] && [source containsString:@" · 实时监测"])
+        return [[source stringByReplacingOccurrencesOfString:@"步骤 " withString:@"Step "] stringByReplacingOccurrencesOfString:@" · 实时监测" withString:@" · Live Monitoring"];
 
     return source;
 }
