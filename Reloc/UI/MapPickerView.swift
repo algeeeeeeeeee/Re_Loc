@@ -273,7 +273,7 @@ struct MapPickerView: View {
             }
 
             Menu {
-                Section("地图数据源") {
+                Section("Map Source") {
                     ForEach(MapSource.allCases) { source in
                         Button {
                             viewModel.mapSource = source
@@ -283,7 +283,7 @@ struct MapPickerView: View {
                     }
                 }
                 if viewModel.mapSource == .appleNative {
-                    Section("Apple 地图样式") {
+                    Section("Apple Maps Style") {
                         ForEach(MapDisplayStyle.allCases) { style in
                             Button {
                                 viewModel.mapStyle = style
