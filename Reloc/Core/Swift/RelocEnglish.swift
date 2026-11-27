@@ -37,7 +37,7 @@ enum RelocEnglish {
         ("Lockdown 中断，", "Lockdown interrupted, "),
         ("无法发布配对服务", "Unable to publish the pairing service"),
         ("无法写入系统钥匙串", "Unable to write to the system Keychain"),
-        ("配对文件导入失败：", "Failed to import pairing file: ")
+        ("配对文件导入失败：", "Failed to import pairing file: "),
         ("无法连接回环地址 ", "Unable to connect to loopback address "),
         ("（请确认外部代理已开启 10.7.0.1 回环）：", " (make sure the external proxy has enabled the 10.7.0.1 loopback): "),
         ("Remote Pairing 身份验证失败：", "Remote Pairing identity verification failed: "),
