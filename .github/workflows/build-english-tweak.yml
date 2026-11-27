@@ -1,0 +1,64 @@
+name: Build Reloc English Tweak
+
+on:
+  push:
+    branches:
+      - tweak/reloc-english
+    paths:
+      - "Tweak.x"
+      - "Makefile"
+      - "control"
+      - "RelocEnglish.plist"
+      - ".github/workflows/build-english-tweak.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: brew install dpkg ldid xz
+
+      - name: Install Theos
+        shell: bash
+        run: |
+          export THEOS="$RUNNER_TEMP/theos"
+          echo "THEOS=$THEOS" >> "$GITHUB_ENV"
+          git clone --recursive --depth 1 https://github.com/theos/theos.git "$THEOS"
+          mkdir -p "$THEOS/sdks"
+          git clone --depth 1 https://github.com/theos/sdks.git "$RUNNER_TEMP/theos-sdks"
+          cp -R "$RUNNER_TEMP"/theos-sdks/*.sdk "$THEOS/sdks/"
+
+      - name: Build rootless and rootful packages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p output
+
+          THEOS_PACKAGE_SCHEME=rootless make clean package FINALPACKAGE=1
+          ROOTLESS_DEB="$(find packages -maxdepth 1 -name '*.deb' -print -quit)"
+          test -n "$ROOTLESS_DEB"
+          cp "$ROOTLESS_DEB" output/RelocEnglish-rootless.deb
+
+          make clean
+          make package FINALPACKAGE=1
+          ROOTFUL_DEB="$(find packages -maxdepth 1 -name '*.deb' -print -quit)"
+          test -n "$ROOTFUL_DEB"
+          cp "$ROOTFUL_DEB" output/RelocEnglish-rootful.deb
+
+          dpkg-deb --info output/RelocEnglish-rootless.deb
+          dpkg-deb --info output/RelocEnglish-rootful.deb
+
+      - name: Upload Debian packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: Reloc-English-Deb-Packages
+          path: output/*.deb
+          if-no-files-found: error
+          retention-days: 14

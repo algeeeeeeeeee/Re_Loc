@@ -1,0 +1,8 @@
+Package: com.alge.relocenglish
+Name: Reloc English UI
+Version: 1.0.0
+Description: Runtime English translation for the Reloc iOS app (dev.reloc.ios). Does not modify the IPA.
+Maintainer: algeeeeeeeeee
+Author: algeeeeeeeeee
+Section: Tweaks
+Depends: mobilesubstrate, firmware (>= 15.0)
