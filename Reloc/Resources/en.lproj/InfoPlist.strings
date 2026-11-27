@@ -1,0 +1,4 @@
+/* English permission descriptions shown by iOS. */
+"NSLocalNetworkUsageDescription" = "Reloc discovers and pairs with this device over the local network. The loopback connection is provided by your external proxy.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Reloc uses location access to remain active in the background during location injection and prevent interruptions.";
+"NSLocationWhenInUseUsageDescription" = "Reloc uses location access to remain active in the background and activate the system location subscription during injection.";
